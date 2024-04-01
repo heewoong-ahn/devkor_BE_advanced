@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { AuthStatus } from '../auth-status-enum';
+import { Post } from 'src/post/entity/post.entity';
 
 @Entity()
 export class Auth extends BaseEntity {
@@ -20,4 +27,7 @@ export class Auth extends BaseEntity {
 
   @Column({ type: 'boolean', default: false })
   verified: boolean;
+
+  @OneToMany(() => Post, (post) => post.auth)
+  posts: Post[];
 }
