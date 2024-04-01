@@ -1,0 +1,30 @@
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TypeOrmConfigService } from './database/typeorm.config';
+import { AuthModule } from './auth/auth.module';
+import * as cookieParser from 'cookie-parser';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: TypeOrmConfigService,
+    }),
+    AuthModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(cookieParser()).forRoutes({
+      path: '*', // 모든 라우트에 적용하려면 '*'을 사용하세요.
+      method: RequestMethod.ALL,
+    });
+  }
+}
