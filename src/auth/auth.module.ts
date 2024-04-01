@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAccessStrategy } from './jwt-access';
 import { JwtRefreshStrategy } from './jwt-refresh';
 
+//인증 기능 쓰려는 모듈마다 따로 import안해줘도 되도록 global로 선언.
+@Global()
 @Module({
   imports: [
     MailerModule.forRootAsync({
@@ -30,6 +32,6 @@ import { JwtRefreshStrategy } from './jwt-refresh';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy],
-  // exports: [JwtAccessStrategy, JwtRefreshStrategy],
+  exports: [JwtAccessStrategy, JwtRefreshStrategy],
 })
 export class AuthModule {}
