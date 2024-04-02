@@ -98,7 +98,7 @@ export class AuthService {
         email: user.email,
         sub: user.nickname,
       },
-      { secret: process.env.SECRET_KEY_ACCESS, expiresIn: '5m' },
+      { secret: process.env.SECRET_KEY_ACCESS, expiresIn: '30m' },
     );
   }
 

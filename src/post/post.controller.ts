@@ -39,6 +39,31 @@ export class PostController {
   @UseGuards(AuthGuard('access'))
   @Delete('/:postId')
   async deletePost(@Param('postId') postId: number, @Req() req) {
-    //service를 부르고 지워지는 것을 확인
+    const isDeleted = await this.postService.deletePost(postId, req.user.email);
+
+    if (!isDeleted) {
+      return { success: 'false', msg: '게시글을 삭제하는데 실패했습니다.' };
+    }
+
+    return { success: 'true', msg: '게시글을 성공적으로 삭제했습니다.' };
+  }
+
+  @UseGuards(AuthGuard('access'))
+  @Post('/:postId/like')
+  async pressLike(@Param('postId') postId: number, @Req() req) {
+    const isLiked = await this.postService.pressLike(postId, req.user.email);
+
+    if (!isLiked) {
+      return {
+        success: 'true',
+        msg: '게시글을 좋아요 했습니다.',
+        info: 'liked',
+      };
+    }
+    return {
+      success: 'true',
+      msg: '게시글 좋아요를 취소했습니다.',
+      info: 'notLiked',
+    };
   }
 }

@@ -9,6 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { PostService } from './post/post.service';
 import { PostController } from './post/post.controller';
 import { PostModule } from './post/post.module';
+import { CommentService } from './comment/comment.service';
+import { CommentController } from './comment/comment.controller';
+import { CommentModule } from './comment/comment.module';
 import * as cookieParser from 'cookie-parser';
 
 @Module({
@@ -20,6 +23,7 @@ import * as cookieParser from 'cookie-parser';
     }),
     AuthModule,
     PostModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
