@@ -65,4 +65,7 @@ export class PostService {
     }
     return true;
   }
+  async test(id: number): Promise<string> {
+    return await this.postRepository.test(id);
+  }
 }

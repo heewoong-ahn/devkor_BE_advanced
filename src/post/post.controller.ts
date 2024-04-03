@@ -9,6 +9,11 @@ import { AuthGuard } from '@nestjs/passport';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Get('/tt')
+  async test(@Body() body: { id: number }) {
+    return this.postService.test(body.id);
+  }
+
   @Get('/:page')
   async listPosts(
     @Param('page') page: number,

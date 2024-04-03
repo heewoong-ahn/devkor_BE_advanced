@@ -95,6 +95,7 @@ export class AuthService {
   getAccessToken(user: Partial<Auth>): string {
     return this.jwtService.sign(
       {
+        id: user.id,
         email: user.email,
         sub: user.nickname,
       },
@@ -105,6 +106,7 @@ export class AuthService {
   setRefreshToken(user: Auth, res: Response) {
     const refreshToken = this.jwtService.sign(
       {
+        id: user.id,
         email: user.email,
         sub: user.nickname,
       },
