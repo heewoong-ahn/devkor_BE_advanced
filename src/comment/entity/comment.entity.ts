@@ -28,4 +28,8 @@ export class Comment extends BaseEntity {
 
   @ManyToOne((type) => Post, (post) => post.comments)
   post: Post;
+
+  //자기참조 : 대댓글
+  @ManyToOne(() => Comment, { nullable: true })
+  parentComment: Comment;
 }

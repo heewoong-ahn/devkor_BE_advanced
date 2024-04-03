@@ -3,10 +3,11 @@ import { Injectable } from '@nestjs/common';
 import { Post } from '../entity/post.entity';
 import { Auth } from '../../auth/entity/auth.entity';
 import { CreatePostDto } from '../dto/create-entity.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PostRepository extends Repository<Post> {
-  constructor(dataSource: DataSource) {
+  constructor(private dataSource: DataSource) {
     super(Post, dataSource.createEntityManager());
   }
 
@@ -17,13 +18,22 @@ export class PostRepository extends Repository<Post> {
   ): Promise<Post[]> {
     const perPage = 10;
     const skip = (page - 1) * perPage;
+    let query;
 
-    let query = this.createQueryBuilder('post')
-      .leftJoin('post.auth', 'auth')
-      .select(['post', 'auth.nickname'])
-      .orderBy(`post.${filter}`, 'DESC')
-      .skip(skip)
-      .take(perPage);
+    if (!filter) {
+      query = this.createQueryBuilder('post')
+        .leftJoin('post.auth', 'auth')
+        .select(['post', 'auth.nickname'])
+        .skip(skip)
+        .take(perPage);
+    } else {
+      query = this.createQueryBuilder('post')
+        .leftJoin('post.auth', 'auth')
+        .select(['post', 'auth.nickname'])
+        .orderBy(`post.${filter}`, 'DESC')
+        .skip(skip)
+        .take(perPage);
+    }
 
     // 검색어가 주어진 경우, title 또는 닉네임으로 검색
     if (search) {
@@ -66,5 +76,9 @@ export class PostRepository extends Repository<Post> {
     }
   }
 
-  //되나 확인.. relations 통해서 객체 부여하면 join해서 가져온 것과 같은 효과? 연결된 auth레코드를 load하는 효과인듯?
+  async test(id: number): Promise<string> {
+    //relations로 연결관계가 매핑된 객체의 data를 load해옴.
+    const postAuth = await this.findOne({ where: { id }, relations: ['auth'] });
+    return postAuth.auth.email;
+  }
 }
