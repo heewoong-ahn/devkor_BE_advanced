@@ -23,4 +23,8 @@ export class CommentService {
       commentId,
     );
   }
+
+  async deleteComment(commentId: number): Promise<boolean> {
+    return await this.commentRepository.deleteComment(commentId);
+  }
 }

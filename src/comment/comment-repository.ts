@@ -32,9 +32,48 @@ export class CommentRepository extends Repository<Comment> {
     }
     //대댓글이면
     else {
-      const comment = this.create({ content, auth, post, parentComment });
-      await this.save(comment);
-      return comment;
+      //대댓글에는 대댓글을 못단다
+      const hasParent = await this.findOne({
+        where: { id: commentId },
+        relations: ['parentComment'],
+      });
+      //부모 댓글이 없다면
+      if (!hasParent.parentComment) {
+        const comment = this.create({ content, auth, post, parentComment });
+        await this.save(comment);
+        return comment;
+      } else {
+        throw new Error('대댓글에는 댓글을 달 수 없습니다.');
+      }
+    }
+  }
+
+  async deleteComment(commentId: number): Promise<boolean> {
+    //transaction 시작
+    const queryRunner = this.manager.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const commentToDelete = await queryRunner.manager.findOne(Comment, {
+        where: { id: commentId },
+      });
+      console.log('AAAAAAAAA');
+      if (!commentToDelete) {
+        // 해당 commentId에 해당하는 댓글이 없는 경우 롤백
+        throw new Error(`${commentId}번 댓글이 존재하지 않습니다.`);
+      }
+      commentToDelete.auth = null;
+      commentToDelete.content = '삭제된 댓글입니다.';
+      commentToDelete.createdAt = null;
+      await queryRunner.manager.save(commentToDelete);
+      await queryRunner.manager.softDelete(Comment, commentToDelete);
+      await queryRunner.commitTransaction();
+      return true;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 }

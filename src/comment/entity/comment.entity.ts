@@ -17,7 +17,11 @@ export class Comment extends BaseEntity {
   @Column('text')
   content: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   createdAt: Date;
 
   @DeleteDateColumn({ type: 'timestamp' })
