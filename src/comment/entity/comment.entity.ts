@@ -25,7 +25,7 @@ export class Comment extends BaseEntity {
   createdAt: Date;
 
   @DeleteDateColumn({ type: 'timestamp' })
-  deletedAt: Date; //soft delete하기 위함.
+  deletedAt: Date | null; //soft delete하기 위함.
 
   @ManyToOne((type) => Auth, (auth) => auth.comments)
   auth: Auth;

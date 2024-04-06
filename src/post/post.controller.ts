@@ -71,4 +71,23 @@ export class PostController {
       info: 'notLiked',
     };
   }
+
+  @UseGuards(AuthGuard('access'))
+  @Get('/info/:postId')
+  async getPostInfo(@Param('postId') postId: number) {
+    try {
+      const postInfo = await this.postService.getPostInfo(postId);
+      return {
+        success: 'true',
+        msg: '게시글 정보를 가져오는데 성공했습니다.',
+        postInfo: postInfo,
+      };
+    } catch (error) {
+      return {
+        success: 'false',
+        msg: '게시글을 불러오는데 실패했습니다.',
+        error: error.message,
+      };
+    }
+  }
 }

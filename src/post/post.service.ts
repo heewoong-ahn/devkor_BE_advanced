@@ -6,14 +6,18 @@ import { CreatePostDto } from './dto/create-entity.dto';
 import { Like } from '../post/entity/like.entity';
 import { Repository } from 'typeorm';
 import { Auth } from '../auth/entity/auth.entity';
+import { LikeRepository } from './repository/like-repository';
+import { CommentRepository } from 'src/comment/comment-repository';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
-    @InjectRepository(Like)
-    private readonly likeRepository: Repository<Like>,
+    @InjectRepository(LikeRepository)
+    private readonly likeRepository: LikeRepository,
+    @InjectRepository(CommentRepository)
+    private readonly commentRepository: CommentRepository,
   ) {}
 
   async listPosts(
@@ -47,6 +51,7 @@ export class PostService {
         where: { post: { id: postId }, auth: { id: authId } },
       });
       await this.likeRepository.delete(like);
+      await this.postRepository.adjustLike(postId, -1);
     } catch (error) {
       //sql문에 null값 등이 들어가 error가 났을 때
     }
@@ -60,6 +65,7 @@ export class PostService {
 
       const newLike = await this.likeRepository.create({ post, auth });
       await this.likeRepository.save(newLike);
+      await this.postRepository.adjustLike(postId, 1);
 
       return false;
     }
@@ -67,5 +73,13 @@ export class PostService {
   }
   async test(id: number): Promise<string> {
     return await this.postRepository.test(id);
+  }
+
+  async getPostInfo(postId: number): Promise<Object> {
+    const postInfo = await this.postRepository.postInfo(postId);
+    postInfo['likeList'] = await this.likeRepository.userList(postId);
+    postInfo['commentList'] = await this.commentRepository.commentList(postId);
+
+    return postInfo;
   }
 }
