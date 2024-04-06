@@ -57,7 +57,6 @@ export class CommentRepository extends Repository<Comment> {
       const commentToDelete = await queryRunner.manager.findOne(Comment, {
         where: { id: commentId },
       });
-      console.log('AAAAAAAAA');
       if (!commentToDelete) {
         // 해당 commentId에 해당하는 댓글이 없는 경우 롤백
         throw new Error(`${commentId}번 댓글이 존재하지 않습니다.`);
@@ -66,7 +65,10 @@ export class CommentRepository extends Repository<Comment> {
       commentToDelete.content = '삭제된 댓글입니다.';
       commentToDelete.createdAt = null;
       await queryRunner.manager.save(commentToDelete);
+      //내용 수정과 softDelete을 동시에 수행하면 deletedAt이 null이 되는 문제 발생.
+      //softdelete을 한(상태의) record는 보통 내용 수정을 안하는듯?
       await queryRunner.manager.softDelete(Comment, commentToDelete);
+
       await queryRunner.commitTransaction();
       return true;
     } catch (error) {
@@ -75,5 +77,20 @@ export class CommentRepository extends Repository<Comment> {
     } finally {
       await queryRunner.release();
     }
+  }
+  async commentList(postId: number): Promise<Object> {
+    //삭제된 댓글에서 유저정보를 지웠기 때문에 auth가 null인 값들이 있음.
+    const comments = await this.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.auth', 'auth')
+      .leftJoin('comment.post', 'post')
+      .where('post.id = :postId', { postId })
+      .withDeleted()
+      .orderBy('comment.createdAt', 'DESC')
+      .getMany();
+
+    return comments.map((comment) => ({
+      writer: comment.auth?.nickname,
+      content: comment.content,
+    }));
   }
 }

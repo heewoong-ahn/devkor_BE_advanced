@@ -81,4 +81,28 @@ export class PostRepository extends Repository<Post> {
     const postAuth = await this.findOne({ where: { id }, relations: ['auth'] });
     return postAuth.auth.email;
   }
+
+  async postInfo(postId: number): Promise<Object> {
+    let postInfo = {};
+    const post = await this.findOne({
+      where: { id: postId },
+      relations: ['auth', 'comments', 'likes'],
+    });
+    post.viewsCnt += 1;
+    await this.save(post);
+    postInfo['creator'] = post.auth.nickname;
+    postInfo['createdAt'] = post.createdAt;
+    postInfo['views'] = post.viewsCnt;
+    postInfo['title'] = post.title;
+    postInfo['contents'] = post.content;
+    postInfo['likes'] = post.likesCnt;
+
+    return postInfo;
+  }
+
+  async adjustLike(postId: number, cnt: number) {
+    const post = await this.findOne({ where: { id: postId } });
+    post.likesCnt += cnt;
+    await this.save(post);
+  }
 }

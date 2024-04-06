@@ -11,5 +11,6 @@ import { AuthService } from 'src/auth/auth.service';
   imports: [TypeOrmModule.forFeature([Comment])],
   controllers: [CommentController],
   providers: [CommentService, CommentRepository],
+  exports: [CommentRepository],
 })
 export class CommentModule {}
