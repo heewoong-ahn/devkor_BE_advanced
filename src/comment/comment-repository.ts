@@ -25,6 +25,8 @@ export class CommentRepository extends Repository<Comment> {
 
     const parentComment = new Comment();
     parentComment.id = commentId;
+
+    const postToUpate = await Post.findOne({ where: { id: postId } });
     //대댓글이 아니면
     if (!commentId) {
       const comment = this.create({ content, auth, post });
