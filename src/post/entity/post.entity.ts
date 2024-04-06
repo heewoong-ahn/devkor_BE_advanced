@@ -30,6 +30,9 @@ export class Post extends BaseEntity {
   @Column({ type: 'integer', default: 0 })
   likesCnt: number;
 
+  @Column({ type: 'integer', default: 0 })
+  commentsCnt: number;
+
   @ManyToOne((type) => Auth, (auth) => auth.posts)
   auth: Auth;
 
