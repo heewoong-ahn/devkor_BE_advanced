@@ -18,12 +18,12 @@ import { JwtRefreshStrategy } from './jwt-refresh';
           host: 'smtp.naver.com',
           port: 587,
           auth: {
-            user: process.env.EMAILADDRESS,
-            pass: process.env.EMAILPASSWORD,
+            user: process.env.EMAIL_ADDRESS,
+            pass: process.env.EMAIL_PASSWORD,
           },
         },
         defaults: {
-          from: `'devkor_HW' <${process.env.EMAILADDRESS}>`, //보낸사람
+          from: `'devkor_HW' <${process.env.EMAIL_ADDRESS}>`, //보낸사람
         },
       }),
     }),

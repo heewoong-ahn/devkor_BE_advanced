@@ -12,7 +12,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       host: this.configService.get<string>('DB_HOST'), // TODO: 데이터베이스 서버 호스트
       // '+' 불러온 문자열을 숫자로 변환
       port: +this.configService.get<number>('DB_PORT'),
-      username: this.configService.get<string>('DB_NAME'),
+      username: this.configService.get<string>('DB_USERNAME'),
       password: this.configService.get<string>('DB_PASSWORD'),
       database: this.configService.get<string>('DB_DATABASE'),
       synchronize: true, // TODO: 스키마 자동 동기화 (production에서는 false) 코드 기준 동기화
