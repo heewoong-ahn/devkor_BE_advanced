@@ -82,7 +82,7 @@ jobs:
           echo "APPLE_CLIENT_ID=${{secrets.APPLE_CLIENT_ID}}" >> .env
           echo "APPLE_CALLBACK_URL=${{secrets.APPLE_CALLBACK_URL}}" >> .env
           echo "APPLE_KEY_ID=${{secrets.APPLE_KEY_ID}}" >> .env
-          echo "APPLE_PRIVATE_KEY_LOCATION=${{secrets.APPLE_PRIVATE_KEY_LOCATION}}" >> .env
+          echo "APPLE_PRIVATE_KEY=${{secrets.APPLE_PRIVATE_KEY}}" >> .env
           cat .env
 
       - name: run docker
