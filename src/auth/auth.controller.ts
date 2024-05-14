@@ -19,6 +19,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
   @Put('/createID')
   async codeVerification(@Body() body: { email: string; code: string }) {
     const user = await this.authService.findUserByEmail(body.email);
