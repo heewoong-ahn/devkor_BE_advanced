@@ -12,6 +12,9 @@ import { PostModule } from './post/post.module';
 import { CommentService } from './comment/comment.service';
 import { CommentController } from './comment/comment.controller';
 import { CommentModule } from './comment/comment.module';
+import { AppleService } from './apple/apple.service';
+import { AppleController } from './apple/apple.controller';
+import { AppleModule } from './apple/apple.module';
 import * as cookieParser from 'cookie-parser';
 
 @Module({
@@ -24,6 +27,7 @@ import * as cookieParser from 'cookie-parser';
     AuthModule,
     PostModule,
     CommentModule,
+    AppleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
