@@ -15,7 +15,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       teamID: process.env.APPLE_TEAM_ID,
       callbackURL: process.env.APPLE_CALLBACK_URL,
       keyID: process.env.APPLE_KEY_ID,
-      privateKeyString: process.env.APPLE_PRIVATE_KEY,
+      privateKeyLocation: process.env.APPLE_PRIVATE_KEY_LOCATION,
       scope: ['name', 'email'],
       //validate 콜백함수로 req를 인자로 넘길 것인지 여부.
       passReqToCallback: false,
