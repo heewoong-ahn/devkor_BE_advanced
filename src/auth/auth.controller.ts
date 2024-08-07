@@ -200,4 +200,11 @@ export class AuthController {
   //     nickname: req.user.nickname,
   //   });
   // }
+
+  @Post('/social/apple-endpoint')
+  async handleAppleNotification(@Body('payload') payload: string) {
+    //추후 논의 후 구현.
+    console.log(payload);
+    return;
+  }
 }
