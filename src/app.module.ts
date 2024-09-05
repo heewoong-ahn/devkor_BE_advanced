@@ -13,6 +13,7 @@ import { CommentService } from './comment/comment.service';
 import { CommentController } from './comment/comment.controller';
 import { CommentModule } from './comment/comment.module';
 import * as cookieParser from 'cookie-parser';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -20,6 +21,12 @@ import * as cookieParser from 'cookie-parser';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
+    }),
+    PrometheusModule.register({
+      path: '/metrics',
+      defaultMetrics: {
+        enabled: true,
+      },
     }),
     AuthModule,
     PostModule,
