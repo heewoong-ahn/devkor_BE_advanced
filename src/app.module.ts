@@ -14,6 +14,8 @@ import { CommentController } from './comment/comment.controller';
 import { CommentModule } from './comment/comment.module';
 import * as cookieParser from 'cookie-parser';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { CustomMetricsService } from './custom-metrics/custom-metrics.service';
+import { MetricsMiddleware } from './common/middlewares/metrics.middleware';
 
 @Module({
   imports: [
@@ -31,9 +33,10 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     AuthModule,
     PostModule,
     CommentModule,
+    PrometheusModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CustomMetricsService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
@@ -41,5 +44,6 @@ export class AppModule {
       path: '*', // 모든 라우트에 적용하려면 '*'을 사용하세요.
       method: RequestMethod.ALL,
     });
+    consumer.apply(MetricsMiddleware).forRoutes('*');
   }
 }
