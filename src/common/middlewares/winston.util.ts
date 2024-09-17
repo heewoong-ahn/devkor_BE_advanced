@@ -3,7 +3,8 @@ import * as winstonDaily from 'winston-daily-rotate-file';
 import * as winston from 'winston';
 import LokiTransport from 'winston-loki';
 
-const logDir = '/app/logs'; // 로그 파일 저장 경로
+// const logDir = __dirname + '/../../logs'; // 로그 파일 저장 경로
+const logDir = '/app/logs';
 console.log(__dirname);
 //winston도 nestjs와 같은 loggerService를 사용함.
 export const winstonLogger = WinstonModule.createLogger({
