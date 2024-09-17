@@ -78,10 +78,11 @@ jobs:
           echo "SECRET_KEY_REFRESH=${{secrets.SECRET_KEY_REFRESH}}" >> .env
           echo "EMAIL_ADDRESS=${{secrets.EMAILADDRESS}}" >> .env
           echo "EMAIL_PASSWORD=${{secrets.EMAILPASSWORD}}" >> .env
+          echo "NODE_ENV=${{secrets.NODE_ENV}}" >> .env
           cat .env
 
       - name: run docker
         run: |
           cat .env
           docker stop ${{env.DOCKER_CONTAINER}} && docker rm ${{env.DOCKER_CONTAINER}} && docker rmi ${{env.DOCKER_IMAGE}}:latest
-          docker run --env-file ./.env  -d -p 3000:3000 --name ${{env.DOCKER_CONTAINER}} --network host --restart always ${{env.DOCKER_IMAGE}}:latest
+          docker run --env-file ./.env  -d -p 3000:3000 --name ${{env.DOCKER_CONTAINER}} --network host --restart always -v /home/ec2-user/logs:/app/logs ${{env.DOCKER_IMAGE}}:latest

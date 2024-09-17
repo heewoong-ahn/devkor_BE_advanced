@@ -1,4 +1,9 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import {
+  Module,
+  MiddlewareConsumer,
+  RequestMethod,
+  Logger,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { DataSource } from 'typeorm';
@@ -16,6 +21,7 @@ import * as cookieParser from 'cookie-parser';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { CustomMetricsService } from './custom-metrics/custom-metrics.service';
 import { MetricsMiddleware } from './common/middlewares/metrics.middleware';
+import { LoggerMiddleware } from './common/logger.middleware';
 
 @Module({
   imports: [
@@ -45,5 +51,7 @@ export class AppModule {
       method: RequestMethod.ALL,
     });
     consumer.apply(MetricsMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+    // consumer.apply(LoggerContextMiddleware).forRoutes('*');
   }
 }

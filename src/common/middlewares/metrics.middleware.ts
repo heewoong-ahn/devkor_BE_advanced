@@ -7,10 +7,10 @@ export class MetricsMiddleware implements NestMiddleware {
   constructor(private readonly customMetricsService: CustomMetricsService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const start = process.hrtime(); // 요청 시작 시간
+    const start = process.hrtime(); // 요청 시작 시간 //현재 시간의 [초, 나노초] 반환.
 
     res.on('finish', () => {
-      const duration = process.hrtime(start); // 요청이 완료된 후 걸린 시간 계산
+      const duration = process.hrtime(start); // 요청이 완료된 후 걸린 시간 계산 //경과 시간 계산.
       const seconds = duration[0] + duration[1] / 1e9; // 시간을 초로 변환
 
       const method = req.method;
