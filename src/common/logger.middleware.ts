@@ -27,7 +27,7 @@ export class LoggerMiddleware implements NestMiddleware {
       //     winstonLogger.log(logMessage);
       //   }
       // });
-      winstonLogger.debug(logMessage);
+      winstonLogger.log(logMessage);
     });
 
     next(); // 다음 미들웨어로 넘어가거나 요청을 처리함
