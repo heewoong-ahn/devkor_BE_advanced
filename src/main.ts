@@ -1,11 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { MetricsMiddleware } from './common/middlewares/metrics.middleware';
+import { winstonLogger } from './common/middlewares/winston.util';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter());
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(), {
+    bufferLogs: true,
+    logger: winstonLogger,
+  });
+
+  // app.useLogger(winstonLogger);
+  // Logger.overrideLogger(false);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // DTO에 작성한 값만 수신

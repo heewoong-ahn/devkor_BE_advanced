@@ -1,9 +1,19 @@
-import { Body, Controller, Param, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  LoggerService,
+  Param,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { Get, Post, Delete } from '@nestjs/common';
 import { CreatePostDto } from 'src/post/dto/create-entity.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AppController } from 'src/app.controller';
 
 @Controller('post')
 export class PostController {
@@ -21,6 +31,10 @@ export class PostController {
     @Query('search') search: string,
   ) {
     const pageList = await this.postService.listPosts(page, filter, search);
+
+    if (page == 2) {
+      throw new Error('page number가 2번입니다.');
+    }
 
     if (Object.keys(pageList).length === 0) {
       return { success: 'false', msg: '표시할 게시글이 없습니다.' };
