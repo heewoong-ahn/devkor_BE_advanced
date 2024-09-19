@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpException,
   Inject,
   LoggerService,
   Param,
@@ -14,6 +15,8 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppController } from 'src/app.controller';
+import winston from 'winston/lib/winston/config';
+import { winstonLogger } from 'src/common/middlewares/winston.util';
 
 @Controller('post')
 export class PostController {
@@ -33,7 +36,14 @@ export class PostController {
     const pageList = await this.postService.listPosts(page, filter, search);
 
     if (page == 2) {
-      throw new Error('page number가 2번입니다.');
+      winstonLogger.error({ pageNum: 2, content: '페이지가 2번입니다.' });
+      // throw new Error('page number가 2번입니다.');
+    } else if (page == 3) {
+      winstonLogger.error('page number가 3번입니다.');
+    } else if (page == 4) {
+      throw new Error('page number가 4번입니다.');
+    } else if (page == 5) {
+      throw new HttpException('page 5 not found', 404);
     }
 
     if (Object.keys(pageList).length === 0) {
