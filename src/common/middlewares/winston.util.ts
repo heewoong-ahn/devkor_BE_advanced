@@ -2,8 +2,8 @@ import { utilities, WinstonModule } from 'nest-winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
 import * as winston from 'winston';
 
-// const logDir = __dirname + '/../../logs'; // 로그 파일 저장 경로
-const logDir = '/app/logs';
+const logDir = __dirname + '/../../logs'; // 로그 파일 저장 경로
+// const logDir = '/app/logs';
 console.log(__dirname);
 
 const transports: winston.transport[] = [
@@ -23,6 +23,7 @@ const transports: winston.transport[] = [
     datePattern: 'YYYY-MM-DD', // 일별로 파일 생성
     zippedArchive: true, // 로그 파일을 압축
     maxFiles: '30d', // 30일치 로그 파일만 보관
+    format: winston.format.json(),
     //maxSize //단일 로그 파일의 최대 크기, 크기를 넘어서면 다른 로그 파일이 생성됨.
   }),
 
@@ -34,6 +35,7 @@ const transports: winston.transport[] = [
     datePattern: 'YYYY-MM-DD',
     zippedArchive: true,
     maxFiles: '30d',
+    format: winston.format.json(),
   }),
 ];
 
@@ -45,12 +47,11 @@ if (process.env.NODE_ENV !== 'production') {
 //winston도 nestjs와 같은 loggerService를 사용함.
 export const winstonLogger = WinstonModule.createLogger({
   level: 'silly',
-
   format: winston.format.combine(
+    // winston.format.json(),
     winston.format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss', // 타임스탬프 형식
     }),
-    winston.format.json(),
     utilities.format.nestLike('IEUM', {
       prettyPrint: true, // 가독성 좋은 포맷
       colors: true, // 로그에 색상 추가
