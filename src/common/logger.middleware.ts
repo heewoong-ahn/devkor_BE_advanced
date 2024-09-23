@@ -18,9 +18,17 @@ export class LoggerMiddleware implements NestMiddleware {
     res.on('finish', () => {
       const { statusCode } = res;
       const responseTime = Date.now() - startTime; // 응답 시간
-      const logMessage = `[IEUM] ${method} ${originalUrl} ${statusCode} - ${responseTime}ms - IP: ${ip} [${JSON.stringify(params)}] [${JSON.stringify(query)}] [${JSON.stringify(body)}] }`;
-
-      winstonLogger.log(logMessage);
+      const requestLogMessage = {
+        app: 'TEST',
+        method: method,
+        endpoint: originalUrl,
+        statusCode: statusCode,
+        reponseTime: `${responseTime}ms`,
+        ip: ip,
+        query: query,
+        body: body,
+      };
+      winstonLogger.log(requestLogMessage);
     });
 
     next(); // 다음 미들웨어로 넘어가거나 요청을 처리함

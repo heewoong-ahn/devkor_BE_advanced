@@ -39,7 +39,7 @@ export class PostController {
       winstonLogger.error({ pageNum: 2, content: '페이지가 2번입니다.' });
       // throw new Error('page number가 2번입니다.');
     } else if (page == 3) {
-      winstonLogger.error('page number가 3번입니다.');
+      winstonLogger.error({ pageNum: 3, content: '페이지가 3번입니다.' });
     } else if (page == 4) {
       throw new Error('page number가 4번입니다.');
     } else if (page == 5) {

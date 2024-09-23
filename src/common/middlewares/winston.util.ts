@@ -52,7 +52,7 @@ export const winstonLogger = WinstonModule.createLogger({
     winston.format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss', // 타임스탬프 형식
     }),
-    utilities.format.nestLike('IEUM', {
+    utilities.format.nestLike('TEST', {
       prettyPrint: true, // 가독성 좋은 포맷
       colors: true, // 로그에 색상 추가
     }),
